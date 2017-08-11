@@ -1,80 +1,101 @@
 import React from 'react';
 
+class Marker extends React.Component{
 
-class Marker extends React.Component {
+    constructor(){
+        super();
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            hover: false,
-            pressed: false
+        this.state={
+            hover:true,
+            pressed:true
         };
 
-        this.handleMouseClick=this.handleMouseClick.bind(this);
-        this.handleMouseDown=this.handleMouseDown.bind(this);
-        this.handleMouseEnter=this.handleMouseEnter.bind(this);
-        this.handleMouseExit=this.handleMouseExit.bind(this);
-        this.handleMouseUp=this.handleMouseUp.bind(this);
+        this.handleOnClick=this.handleOnClick.bind(this);
+        this.handleOnMouseDown=this.handleOnMouseDown.bind(this);
+        this.handleOnMouseEnter=this.handleOnMouseEnter.bind(this);
+        this.handleOnMouseExit=this.handleOnMouseEnter.bind(this);
+        this.handleOnMouseUp=this.handleOnMouseUp.bind(this);
     }
 
-    handleMouseClick(evt) {
-        if (!this.props.onClick) return;
+    handleOnClick(evt){
+        if(!this.props.onClick) return;
+
         evt.persist();
-
-        return this.props.onClick &&
-            this.props.onClick(this.props.marker, this.props.projection()(this.props.marker.coordinates), evt);
-
+        return this.props.onClick && this.props.onClick(this.props.marker,evt);
     }
 
-    handleMouseEnter(evt) {
+    handleOnMouseDown(evt){
         evt.persist();
         this.setState({
-            hover: true
-        }, () => this.props.onMouseEnter && this.props.onMouseEnter(this.props.marker, evt));
+            pressed:true
+        });
 
-
+        return this.props.onMouseDown && this.props.onClick(this.props.marker,evt);
     }
 
-    handleMouseExit(evt) {
+    handleOnMouseUp(evt){
         evt.persist();
         this.setState({
-            hover: false,
-            pressed: false
-        }, () => this.props.onMouseExit && this.props.onMouseExit(this.props.marker, evt));
+            pressed:false
+        });
+
+        return this.props.onMouseUp && this.props.onMouseUp(this.props.marker,evt);
     }
 
-    handleMouseDown(evt) {
+    handleOnMouseEnter(evt){
         evt.persist();
         this.setState({
-            pressed: true
-        }, () => this.props.onMouseDown && this.props.onMouseDown(this.props.marker, evt));
+            hover:true
+        });
+
+        return this.props.onMouseEnter && this.props.onMouseEnter(this.props.marker,evt);
+
     }
 
-    handleMouseUp(evt) {
+    handleOnMouseExit(evt){
         evt.persist();
         this.setState({
-            pressed: false
-        }, () => this.props.onMouseUp && this.props.onMouseUp(this.props.marker, evt));
+            hover:false
+        });
 
+        return this.props.onMouseExit && this.props.onMouseExit(this.props.marker,evt);
     }
 
 
-    render() {
-        return (
-            <g className="marker"
-               style={this.props.style[this.state.pressed || this.state.hover ? (this.state.pressed ? 'pressed' : 'hover') : 'default']}
-               onMouseUp={this.handleMouseUp}
-               onMouseDown={this.handleMouseDown}
-               onMouseLeave={this.handleMouseExit}
-               onMouseEnter={this.handleMouseEnter}
-               onClick={this.handleMouseClick}
+
+    render(){
+        return(
+            <g
+                className="marker"
+                transform={`translate(
+                    ${(this.props.projection)(this.props.marker.coordinates)[0]}
+                    ${(this.props.projection)(this.props.marker.coordinates)[1]}
+                )`}
+
+                style={this.props.style[this.state.pressed || this.state.hover ? (this.state.pressed ? 'pressed': 'hover'):'default']}
+                onClick={this.handleOnClick}
+                onMouseEnter={this.handleOnMouseEnter}
+                onMouseLeave={this.handleOnMouseExit}
+                onMouseDown={this.handleOnMouseDown}
+                onMouseUp={this.handleOnMouseUp}
+
             >
                 {this.props.children}
             </g>
         );
     }
+
 }
 
+
+Marker.defaultProps={
+  style:{
+      default:{},
+      hover:{},
+      pressed:{}
+
+  }
+};
 
 
 export default Marker;
