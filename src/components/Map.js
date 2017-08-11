@@ -1,16 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import Topographies from './Topographies';
+// import Topography from './Topography';
+import Projection from './Projection';
+// import ProjectionConfig from './ProjectionConfig';
 
 class Map extends React.Component{
     constructor(props){
         super(props);
     }
 
+    projection(width,height,config){
+        return Projection(width,height,config);
+    }
+
     render(){
 
         return(
             <svg width={this.props.width} height={this.props.height} viewBox={`0 0 ${this.props.width} ${this.props.height}`} >
+                    {React.cloneElement(this.props.children,{
+                        projection:this.projection(this.props.width,this.props.height,this.props.config)
+
+                    })}
 
             </svg>
         );

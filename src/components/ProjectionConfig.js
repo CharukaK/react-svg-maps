@@ -1,5 +1,5 @@
 export default {
-    scale:160,
+    scale:1000,
     xOffset:0,
     yOffset:0,
     rotation:[0,0,0],
