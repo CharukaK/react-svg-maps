@@ -28,39 +28,37 @@ class Topography extends React.Component{
         evt.persist();
         this.setState({
             hover:true
-        });
-        return this.props.onMouseEnter && this.props.onMouseEnter(this.props.topography,evt);
-        
+        },()=>this.props.onMouseEnter && this.props.onMouseEnter(this.props.topography,evt));
+
     }
 
     handleMouseExit(evt){
         evt.persist();
         this.setState({
             hover:false
-        });
-        return this.props.onMouseLeave && this.props.onMouseLeave(this.props.topography,evt);
+        },()=> this.props.onMouseLeave && this.props.onMouseLeave(this.props.topography,evt));
+
     }
 
 
     handleMouseMove(evt){
         evt.persist();
         if(this.state.pressed) return;
-        if(!this.state.hover) this.setState({hover:true});
-        return this.props.onMouseMove && this.props.onMouseMove(this.props.topography,evt);
+        if(!this.state.hover) this.setState({hover:true},()=>this.props.onMouseMove && this.props.onMouseMove(this.props.topography,evt));
+
     }
 
 
 
     handleMouseDown(evt){
         evt.persist();
-        this.setState({pressed:true});
-        return this.props.onMouseDown && this.props.onMouseDown(this.props.topography,evt);
+        this.setState({pressed:true},()=>this.props.onMouseDown && this.props.onMouseDown(this.props.topography,evt));
+
     }
 
     handleMouseUp(evt) {
         evt.persist();
-        this.setState({pressed:false});
-        return this.props.onMouseUp && this.props.onMouseUp(this.props.topography,evt);
+        this.setState({pressed:false},()=>this.props.onMouseUp && this.props.onMouseUp(this.props.topography,evt));
         
     }
 
