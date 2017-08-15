@@ -8,6 +8,9 @@ import Topography from './Topography';
 import Markers from './Markers';
 import Marker from './Marker';
 import {scaleLinear} from 'd3-scale';
+import ChartGen from './ChartGeneration';
+
+
 
 export default class App extends React.Component {
 
@@ -45,6 +48,15 @@ export default class App extends React.Component {
     ];
 
 
+    mapTest={
+      type:'map',
+      chart:{type:'world'},
+      width:300,
+      height:900
+    };
+
+
+
     cityScale = scaleLinear()
         .domain([0, 37843000])
         .range([1, 25]);
@@ -54,9 +66,9 @@ export default class App extends React.Component {
         return (
             <div>
                 <Row title="World map Sample">
-                    <Map width={800} height={450} config={{scale: 100}}>
+                    <Map width={800} height={900} config={{scale: 100}}>
 
-                        <Topographies topojsonURL='./api/world'>
+                        <Topographies inbuiltMapType="world">
                             {(topographies, projection) => topographies.map((topography, i) => (
                                 <Topography
                                     key={i}
@@ -64,7 +76,7 @@ export default class App extends React.Component {
                                     projection={projection}
                                     style={{
                                         default: {
-                                            fill: '#ECEFF1',
+                                            fill: topography.id==='AUS' ? '#FF5722': '#ace9f1',
                                             stroke: '#607D8B',
                                             strokeWidth: 0.75,
                                             outline: 'none',
@@ -82,7 +94,10 @@ export default class App extends React.Component {
                                             outline: 'none',
                                         },
                                     }}
+                                    onClick={()=>{console.info(topography);}}
+                                    tooltip={`Country ID : ${topography.id}`}
                                 />
+
                             ))}
                         </Topographies>
 
@@ -107,6 +122,10 @@ export default class App extends React.Component {
 
 
                     </Map>
+
+                </Row>
+                <Row title="World map Sample 2">
+                    <ChartGen config={this.mapTest} data={this.data} />
                 </Row>
             </div>
         );

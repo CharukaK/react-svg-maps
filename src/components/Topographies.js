@@ -1,55 +1,79 @@
 import React from 'react';
 import {feature} from 'topojson-client';
 import PropTypes from 'prop-types';
+import worldMap from './jsonMapFiles/world';
+import europeMap from './jsonMapFiles/europe';
+import usaMap from './jsonMapFiles/usa';
 
-class Topographies extends  React.Component{
-    constructor(props){
+class Topographies extends React.Component {
+    constructor(props) {
         super(props);
-        this.state={
-            topoGraphyPaths:[]
+        this.state = {
+            topoGraphyPaths: []
         };
-        
+
     }
 
-    getTopographyPaths(topojsonURL){
-        if(!topojsonURL) return;
+    getTopographyPaths(topojsonURL) {
+        if (!topojsonURL) {
+            let topoGPaths=null;
 
-        const req= new XMLHttpRequest();
-        req.open('GET',topojsonURL,true);
+            switch (this.props.inbuiltMapType){
+                case 'world':
+                    topoGPaths=worldMap;
+                    break;
 
-
-        req.onload=()=>{
-            if(req.status >= 200 && req.status < 400){
-                const topoGPaths=JSON.parse(req.responseText);
-                this.setState({
-                    topoGraphyPaths:feature(topoGPaths,topoGPaths.objects[Object.keys(topoGPaths.objects)[0]]).features,
-                });
-                // console.log(this.state.topoGraphyPaths);
-                console.log(this.state.topoGraphyPaths);
+                case 'europe':
+                    topoGPaths=europeMap;
+                    break;
+                case 'usa':
+                    topoGPaths=usaMap;
+                    break;
+                default:
+                    console.error('map type not identified');
+                    return;
             }
-        };
 
-        req.onerror=()=>{
-            console.log('There was a connection error');
-        };
+            this.setState({
+                topoGraphyPaths: feature(topoGPaths, topoGPaths.objects[Object.keys(topoGPaths.objects)[0]]).features,
+            });
 
-        req.send();
 
+        } else {
+
+            const req = new XMLHttpRequest();
+            req.open('GET', topojsonURL, true);
+
+
+            req.onload = () => {
+                if (req.status >= 200 && req.status < 400) {
+                    const topoGPaths = JSON.parse(req.responseText);
+                    this.setState({
+                        topoGraphyPaths: feature(topoGPaths, topoGPaths.objects[Object.keys(topoGPaths.objects)[0]]).features,
+                    });
+                    // console.log(this.state.topoGraphyPaths);
+                    console.log(this.state.topoGraphyPaths);
+                }
+            };
+
+            req.onerror = () => {
+                console.log('There was a connection error');
+            };
+
+            req.send();
+        }
     }
 
 
-
-
-    componentDidMount(){
+    componentDidMount() {
         this.getTopographyPaths(this.props.topojsonURL);
     }
 
-    
 
-    render(){
-        return(
+    render() {
+        return (
             <g className="geographies">
-                 {this.props.children(this.state.topoGraphyPaths,this.props.projection)} 
+                {this.props.children(this.state.topoGraphyPaths, this.props.projection)}
             </g>
         );
     }
@@ -57,8 +81,10 @@ class Topographies extends  React.Component{
 }
 
 
-Topographies.propTypes={
-    children:PropTypes.func.isRequired
+Topographies.propTypes = {
+    children: PropTypes.func.isRequired,
+    inbuiltMapType:PropTypes.string,
+    topojsonURL:PropTypes.string
 };
 
 export default Topographies;

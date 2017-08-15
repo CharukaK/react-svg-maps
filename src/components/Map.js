@@ -9,7 +9,7 @@ import Projection from './Projection';
 class Map extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props.children);
+
     }
 
     projection(width, height, config) {
@@ -30,7 +30,8 @@ class Map extends React.Component {
                     Array.isArray(this.props.children) ?
                         this.props.children.map((child, i) => (
                             React.cloneElement(child, {
-                               projection: this.projection(this.props.width, this.props.height, this.props.config)
+                               projection: this.projection(this.props.width, this.props.height, this.props.config),
+                               key:'mapchild-'+i
                             })
                         )) :
 
@@ -54,7 +55,13 @@ Map.defaultProps = {
 
 Map.propTypes = {
     width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
+    height: PropTypes.number.isRequired,
+    children:PropTypes.oneOfType([
+        PropTypes.array,
+        PropTypes.element
+    ]).isRequired,
+    config:PropTypes.array
+
 };
 
 
