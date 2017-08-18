@@ -76,7 +76,7 @@ export default class App extends React.Component {
                                     projection={projection}
                                     style={{
                                         default: {
-                                            fill: topography.id==='AUS' ? '#FF5722': '#ace9f1',
+                                            fill: topography.id==='AUS' ? '#f2e6bb': '#c78f83',
                                             stroke: '#607D8B',
                                             strokeWidth: 0.75,
                                             outline: 'none',
@@ -88,7 +88,7 @@ export default class App extends React.Component {
                                             outline: 'none',
                                         },
                                         pressed: {
-                                            fill: '#FF5722',
+                                            fill: '#f2e6bb',
                                             stroke: '#607D8B',
                                             strokeWidth: 0.75,
                                             outline: 'none',
@@ -111,7 +111,7 @@ export default class App extends React.Component {
                                         cx={0}
                                         cy={0}
                                         r={this.cityScale(city.population)}
-                                        fill='#0DFFE7'
+                                        fill='#810328'
                                         stroke='#ffffff'
                                         strokeWidth={2}
                                     />
@@ -131,5 +131,3 @@ export default class App extends React.Component {
         );
     }
 }
-
-
